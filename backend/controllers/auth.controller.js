@@ -84,3 +84,20 @@ module.exports.logout = async (req,res) =>{
      }
 }
 
+
+module.exports.getMe = async (req,res) =>{
+
+    try{
+    
+        let user = await User.findOne({_id: req.user._id}).select("-password");
+        if(!user){
+            res.status(404).json({error: 'User not found'})
+        }
+
+        res.status(200).json({message:"User fetch success",user})
+
+    }catch(err){
+        console.log('Error in getme controller',err)
+        res.status(500).json({error: 'Internal server error'})
+    }
+}
