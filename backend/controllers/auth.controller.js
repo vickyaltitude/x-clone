@@ -37,7 +37,7 @@ module.exports.signup = async (req,res) =>{
       if(newUser){
         generateToken(newUser._id,res)
         await newUser.save()
-        res.status(201).json({message:'User created successfully',newUser})
+        res.status(201).json({message:'User created successfully'})
 
       }else{
         res.status(500).json({error:'error while creating new user internally'})
@@ -62,7 +62,7 @@ module.exports.login = async (req,res) =>{
            }
 
            generateToken(user._id,res)
-           res.status(200).json({message:"Login success",user})
+           res.status(200).json({message:"Login success"})
 
      }catch(err){
         console.log('Error in login controller',err)

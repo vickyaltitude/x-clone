@@ -10,6 +10,7 @@ const protectGetMeRoute = async (req,res,next) =>{
        }
 
        const decode = jwt.verify(token,process.env.JWT_SECRET);
+     
        if(!decode){
         res.status(400).json({error:"Authentication token is invalid"})
        }
