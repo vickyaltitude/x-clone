@@ -16,6 +16,8 @@ const PORT = process.env.PORT;
 const authRoute = require('./routes/auth.route');
 const connectDB = require('./utils/connectDB');
 const userRoute = require('./routes/user.route')
+const postRoute = require('./routes/post.route');
+const notificationRoute = require("./routes/notification.route");
 
 app.use(express.json())
 app.use(cookieparser())
@@ -24,7 +26,9 @@ app.use('/api/auth',authRoute)
 
 app.use('/api/user',userRoute)
 
+app.use('/api/post',postRoute)
 
+app.use('api/notifications',notificationRoute)
 
 app.listen(PORT,()=> {
     

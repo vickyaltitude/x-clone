@@ -49,7 +49,12 @@ const User = new Schema({
     link:{
         type: String,
         default: ''
-    }
+    },
+    likedPosts:[{
+        type: Schema.Types.ObjectId,
+        ref: 'PostSchema',
+        default: []
+    }]
 
 
 },{timestamps:true})
