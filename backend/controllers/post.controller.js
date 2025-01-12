@@ -101,7 +101,7 @@ module.exports.createComment = async (req, res) => {
 
     await newNotification.save();
 
-    res.status(200).json({message:"comment successful on post"})
+    res.status(200).json({message:"comment successful on post",updatedComment: post.comments})
 
   } catch (err) {
     console.log(`Error in create comment controller,${err}`);
@@ -124,12 +124,13 @@ module.exports.likeUnlikePost = async (req,res) =>{
 
         if(userAlreadyLiked){
 
-             post.likes.filter(like => like.toString !== userId.toString())
-             await post.save()
 
-             await User.updateOne({_id:userId},{$pull:{likedPosts:postId}})
+          await Post.updateOne({_id:postId},{$pull :{likes: userId}})
+          await User.updateOne({_id:userId},{$pull:{likedPosts:postId}})
 
-             return res.status(200).json({message:"Post unliked successfully"})
+             let updatedLikes = post.likes.filter(like => like.toString !== userId.toString())
+
+             return res.status(200).json({message:"Post unliked successfully",updatedLikes})
 
         }else{
 
@@ -146,7 +147,7 @@ module.exports.likeUnlikePost = async (req,res) =>{
           
               await newNotification.save();
 
-              res.status(200).json({message:"Post liked successfully"})
+              res.status(200).json({message:"Post liked successfully",updatedLikes: post.likes})
 
         }
 

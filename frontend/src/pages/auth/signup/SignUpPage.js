@@ -9,6 +9,8 @@ import { MdPassword } from "react-icons/md";
 import { MdDriveFileRenameOutline } from "react-icons/md";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { baseUrl } from "../../../constant/url";
+import LoadingSpinner from "../../../components/common/LoadingSpinner";
 
 const SignUpPage = () => {
 	const [formData, setFormData] = useState({
@@ -20,11 +22,11 @@ const SignUpPage = () => {
 
 	const queryClient = useQueryClient();
 
-	const { mutate, isError, isPending, error } = useMutation({
+	const { mutate : signup, isError, isPending, error } = useMutation({
 
 		mutationFn: async ({ email, username, fullName, password }) => {
 			try {
-				const res = await fetch("/api/auth/signup", {
+				const res = await fetch(`${baseUrl}/api/auth/signup`, {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",
@@ -52,7 +54,7 @@ const SignUpPage = () => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault(); 
-		mutate(formData);
+		signup(formData);
 	};
 
 	const handleInputChange = (e) => {
@@ -115,7 +117,7 @@ const SignUpPage = () => {
 						/>
 					</label>
 					<button className='btn rounded-full btn-primary text-white'>
-						{isPending ? "Loading..." : "Sign up"}
+						{isPending ? <LoadingSpinner /> : "Sign up"}
 					</button>
 					{isError && <p className='text-red-500'>{error.message}</p>}
 				</form>
