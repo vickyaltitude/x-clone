@@ -16,10 +16,10 @@ cloudinary.config({
 
 
 app.use(cors({
-    origin :"http://localhost:5000",
+    origin :"http://localhost:3000",
     credentials: true
 }))
-
+app.use(cookieparser())
 
 const authRoute = require('./routes/auth.route');
 const connectDB = require('./utils/connectDB');
@@ -32,15 +32,15 @@ app.use(express.urlencoded({extended:true}))
 app.use(express.json({
     limit: '5mb'
 }))
-app.use(cookieparser())
+
 
 app.use('/api/auth',authRoute)
 
-app.use('/api/user',userRoute)
+app.use('/api/users',userRoute)
 
-app.use('/api/post',postRoute)
+app.use('/api/posts',postRoute)
 
-app.use('api/notifications',notificationRoute)
+app.use('/api/notifications',notificationRoute)
 
 app.listen(PORT,()=> {
     

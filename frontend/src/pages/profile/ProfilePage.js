@@ -40,12 +40,16 @@ const ProfilePage = () => {
 		queryKey: ["userProfile"],
 		queryFn: async () => {
 			try {
-				const res = await fetch(`${baseUrl}/api/users/profile/${username}`);
+				const res = await fetch(`${baseUrl}/api/users/profile/${username}`,{
+					method:'GET',
+					credentials:"include"
+				});
 				const data = await res.json();
+			
 				if (!res.ok) {
 					throw new Error(data.error || "Something went wrong");
 				}
-				return data;
+				return data.user;
 			} catch (error) {
 				throw new Error(error);
 			}

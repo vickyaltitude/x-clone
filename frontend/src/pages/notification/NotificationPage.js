@@ -15,10 +15,15 @@ const NotificationPage = () => {
     queryKey: ["notifications"],
     queryFn: async () => {
       try {
-        const res = await fetch(`${baseUrl}/api/notifications`);
+        const res = await fetch(`${baseUrl}/api/notifications`,{
+			method: 'GET',
+			credentials: 'include'
+		});
         const data = await res.json();
+	
         if (!res.ok) throw new Error(data.error || "Something went wrong");
-        return data;
+
+        return data.notifications;
       } catch (error) {
         throw new Error(error);
       }
@@ -30,6 +35,7 @@ const NotificationPage = () => {
       try {
         const res = await fetch(`${baseUrl}/api/notifications`, {
           method: "DELETE",
+		  credentials: 'include'
         });
         const data = await res.json();
 
@@ -100,7 +106,7 @@ const NotificationPage = () => {
                     @{notification.from.username}
                   </span>{" "}
                   {notification.type === "follow"
-                    ? "followed you"
+                    ? "followed you" : notification.type === 'comment' ? "commented on your post"
                     : "liked your post"}
                 </div>
               </Link>

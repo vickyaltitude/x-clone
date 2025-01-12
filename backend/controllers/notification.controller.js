@@ -12,7 +12,7 @@ module.exports.getNotifications = async (req,res) =>{
         })
 
         if(notifications.length === 0){
-            res.status(200).json({message:"Notification fetch success",notificaitons:[]})
+            return res.status(200).json({message:"Notification fetch success",notifications:[]})
         }
 
         await NotificationModel.updateMany({to: userId},{read: true});

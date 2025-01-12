@@ -18,7 +18,7 @@ const Post = ({ post }) => {
   const queryClient = useQueryClient();
   const postOwner = post.user;
   const isLiked = post.likes.includes(authUser._id);
-
+  
   const isMyPost = authUser._id === post.user._id;
 
   const formattedDate = formatPostDate(post.createdAt);
@@ -28,6 +28,7 @@ const Post = ({ post }) => {
       try {
         const res = await fetch(`${baseUrl}/api/posts/${post._id}`, {
           method: "DELETE",
+		  credentials:'include'
         });
         const data = await res.json();
 
@@ -50,6 +51,7 @@ const Post = ({ post }) => {
       try {
         const res = await fetch(`${baseUrl}/api/posts/like/${post._id}`, {
           method: "POST",
+		  credentials: 'include'
         });
         const data = await res.json();
         if (!res.ok) {
@@ -84,13 +86,14 @@ const Post = ({ post }) => {
       try {
         const res = await fetch(`${baseUrl}/api/posts/comment/${post._id}`, {
           method: "POST",
+		  credentials: 'include',
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ text: comment }),
         });
         const data = await res.json();
-
+          console.log(data)
         if (!res.ok) {
           throw new Error(data.error || "Something went wrong");
         }

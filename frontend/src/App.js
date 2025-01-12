@@ -16,7 +16,7 @@ import LoadingSpinner from './components/common/LoadingSpinner';
 function App() {
 
         const {data : authUser, isLoading} = useQuery({
-          queryKey: ["authuser"],
+          queryKey: ["authUser"],
           queryFn: async () =>{
               
               try{
@@ -30,7 +30,7 @@ function App() {
                 })
 
                 const data = await res.json();
-
+          
                 if(data.error){
                   authUser = null;
                 }
@@ -38,7 +38,6 @@ function App() {
                   throw new Error(data.error || "something went wrong")
                 }
 
-                console.log("authUser",data)
                 return data
 
               }catch(err){

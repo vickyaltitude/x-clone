@@ -13,12 +13,15 @@ const RightPanel = () => {
 		queryKey: ["suggestedUsers"],
 		queryFn: async () => {
 			try {
-				const res = await fetch(`${baseUrl}/api/users/suggested`);
+				const res = await fetch(`${baseUrl}/api/users/suggested`,{
+					method:'POST',
+					credentials: 'include'
+				});
 				const data = await res.json();
 				if (!res.ok) {
 					throw new Error(data.error || "Something went wrong!");
 				}
-				return data;
+				return data.suggestedUsers;
 			} catch (error) {
 				throw new Error(error.message);
 			}

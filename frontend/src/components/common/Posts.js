@@ -15,14 +15,14 @@ const Posts = ({ feedType, username, userId }) => {
 			case "posts":
 				return `${baseUrl}/api/posts/user/${username}`;
 			case "likes":
-				return `${baseUrl}/api/posts/likes/${userId}`;
+				return `${baseUrl}/api/posts/likedposts/${userId}`;
 			default:
 				return `${baseUrl}/api/posts/all`;
 		}
 	};
-
+  
 	const POST_ENDPOINT = getPostEndpoint();
-
+	
 	const {
 		data: posts,
 		isLoading,
@@ -32,14 +32,18 @@ const Posts = ({ feedType, username, userId }) => {
 		queryKey: ["posts"],
 		queryFn: async () => {
 			try {
-				const res = await fetch(POST_ENDPOINT);
+				const res = await fetch(POST_ENDPOINT,{
+					method: 'GET',
+					credentials: 'include'
+				});
 				const data = await res.json();
-
+			
+             
 				if (!res.ok) {
 					throw new Error(data.error || "Something went wrong");
 				}
 
-				return data;
+				return data
 			} catch (error) {
 				throw new Error(error);
 			}

@@ -17,6 +17,7 @@ const Sidebar = () => {
 			try {
 				const res = await fetch(`${baseUrl}/api/auth/logout`, {
 					method: "POST",
+					credentials: 'include'
 				});
 				const data = await res.json();
 
@@ -36,6 +37,8 @@ const Sidebar = () => {
 		},
 	});
 	const { data: authUser } = useQuery({ queryKey: ["authUser"] });
+
+
 
 	return (
             <div className='md:flex-[2_2_0] w-18 max-w-52'>

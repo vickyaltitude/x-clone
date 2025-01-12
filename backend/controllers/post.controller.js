@@ -7,8 +7,9 @@ module.exports.createPost = async (req, res) => {
   try {
     const { text } = req.body;
     let { img } = req.body;
-
+    
     let userId = req.user._id;
+    console.log(userId)
     let user = await User.findOne({ _id: userId });
     if (!user) {
       return res.status(404).json({ error: "User not found" });
@@ -19,7 +20,7 @@ module.exports.createPost = async (req, res) => {
     }
 
     if (img) {
-      let uploadedRes = cloudinary.uploader.upload(img);
+      let uploadedRes = await cloudinary.uploader.upload(img);
       img = uploadedRes.secure_url;
     }
 
@@ -73,8 +74,8 @@ module.exports.createComment = async (req, res) => {
     const {id} = req.params;
     const {text} = req.body
     const userId = req.user._id;
-    
-    if(text){
+     console.log(text)
+    if(!text){
         return res.status(400).json({error:"Comment text required to post"})
     }
 
@@ -158,10 +159,12 @@ module.exports.likeUnlikePost = async (req,res) =>{
 }
 
 module.exports.getAllPosts = async (req,res) =>{
+   
     try{
 
+      
         const posts = await Post.find().sort({createdAt:-1}).populate({
-            path: 'User',
+            path: 'user',
             select: "-password"
         }).populate({
             path:"comments.user",
@@ -172,7 +175,7 @@ module.exports.getAllPosts = async (req,res) =>{
            return res.status(200).json([])
         }
 
-        res.status(200).json({message:'Posts fetch success',posts})
+        res.status(200).json(posts)
 
     }catch(err){
         console.log(`Error in get all posts controller,${err}`);
@@ -191,14 +194,14 @@ module.exports.getLikedPosts = async (req,res) =>{
          }
 
          const likedPosts = await Post.find({_id: {$in : user.likedPosts}}).populate({
-            path: 'User',
+            path: 'user',
             select: "-password"
         }).populate({
             path:"comments.user",
             select: ['-password','-bio','-link','-followers','-following','-email']
         })
 
-        res.status(200).json({message:"liked posts fetch success",likedPosts})
+        res.status(200).json(likedPosts)
     }catch(err){
         console.log(`Error in get liked posts controller,${err}`);
         res.status(500).json({ error: "Internal server error" });
@@ -220,14 +223,14 @@ module.exports.getFollowingPosts  = async (req,res) =>{
         const following = user.following;
 
         const postsOfFollowing = await Post.find({user :{$in : following}}).sort({createdAt: -1}).populate({
-            path: 'User',
+            path: 'user',
             select: "-password"
         }).populate({
             path:"comments.user",
             select: ['-password','-bio','-link','-followers','-following','-email']
         })
 
-        res.status(200).json({message:"Posts of users following fetch success",postsOfFollowing});
+        res.status(200).json(postsOfFollowing);
 
     }catch(err){
         console.log(`Error in get following posts controller,${err}`);
@@ -247,14 +250,14 @@ module.exports.getUserPost = async (req,res) =>{
         }
 
         const posts = await Post.find({user: user._id}).sort({createdAt: -1}).populate({
-            path: 'User',
+            path: 'user',
             select: "-password"
         }).populate({
             path:"comments.user",
             select: ['-password','-bio','-link','-followers','-following','-email']
         })
 
-        res.status(200).json({message:"User posts fetch success",posts})
+        res.status(200).json(posts)
 
     }catch(err){
         console.log(`Error in get user post controller,${err}`);
